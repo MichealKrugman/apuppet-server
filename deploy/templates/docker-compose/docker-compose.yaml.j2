@@ -48,7 +48,11 @@ services:
     volumes:
       - ./deploy/dist/conf/janus:/usr/local/etc/janus
 {% if is_certbot_enabled %}
-      - ./deploy/dist/ssl:/etc/letsencrypt
+      # ssl_root_path lets a deployment that reuses the HOST's Let's Encrypt
+      # certs (host nginx/certbot) point straight at /etc/letsencrypt instead
+      # of the copy under ./deploy/dist/ssl. Docker cannot bind-mount a
+      # symlink, so the path must be real.
+      - {{ ssl_root_path | default('./deploy/dist/ssl') }}:/etc/letsencrypt
 {% endif %}
     network_mode: host
     restart: unless-stopped
