@@ -201,7 +201,10 @@ certificates: {
 media: {
 	#ipv6 = true
 	#min_nack_queue = 500
-	#rtp_port_range = "20000-40000"
+	# The core must be told the range too, not just the streaming plugin:
+	# otherwise WebRTC media uses random ephemeral ports and opening
+	# UDP 10000-10500 in the firewall does nothing.
+	rtp_port_range = "{{ rtp_port_range }}"
 	#dtls_mtu = 1200
 	#no_media_timer = 1
 	#slowlink_threshold = 4
