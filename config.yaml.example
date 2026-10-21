@@ -1,0 +1,27 @@
+---
+
+# Copy this file to config.yaml and fill in your values:
+#     cp config.yaml.example config.yaml
+# config.yaml is gitignored - it holds deployment specifics and must never be
+# committed. The playbooks load ../config.yaml, so a fresh clone will fail
+# loudly until this copy is made (tasks_check_settings.yaml rejects empty
+# hostname/email anyway).
+
+hostname: ""    # e.g. apuppet.example.com - must already resolve to this server
+email: ""       # admin email, also used for the Let's Encrypt registration
+
+# --- SSL / reverse proxy -------------------------------------------------
+# Reuse the HOST's nginx + certbot (other sites already own ports 80/443):
+#   is_nginx_enabled: false   -> no aPuppet nginx container
+#   is_certbot_enabled: true  -> Janus still gets /etc/letsencrypt mounted and
+#                                wss/https enabled, but no certbot container
+#                                runs (the host's certbot owns renewal)
+#   ssl_root_path             -> real host path for the certs; Docker cannot
+#                                bind-mount a symlink, so pointing it at
+#                                /etc/letsencrypt only works when that is a
+#                                real directory.
+# Set is_nginx_enabled: true only on a dedicated server where aPuppet may own
+# ports 80/443 and run its own certbot container.
+is_nginx_enabled: false
+is_certbot_enabled: true
+ssl_root_path: /etc/letsencrypt

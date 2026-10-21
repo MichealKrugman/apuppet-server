@@ -156,6 +156,9 @@ fabric.properties
 
 config.py
 
+# Deployment-specific server config (copy config.yaml.example -> config.yaml)
+config.yaml
+
 # Test helpers
 node_modules
 *.retry
