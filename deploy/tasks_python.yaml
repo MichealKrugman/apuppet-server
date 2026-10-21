@@ -38,8 +38,18 @@
         ansible_python_version: "{{ python3_version.stdout }}"
   when: ansible_python.version.major| int == 2
 
+# The apt module needs root, but this file is imported by plays that run
+# without become (pre_apuppet/pre_webadmin). Install only what is missing so
+# a modern Ubuntu (python3-pip already present) needs no sudo.
+- name: Check python3 pip availability
+  command: python3 -m pip --version
+  register: python3_pip_check
+  changed_when: false
+  failed_when: false
+
 - name: Install python3 setup accessories
   apt:
     package:
       - python3-setuptools
       - python3-pip
+  when: python3_pip_check.rc != 0

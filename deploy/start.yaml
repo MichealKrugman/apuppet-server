@@ -15,11 +15,12 @@
     - set_fact:
         ssl_enabled: "{% if is_certbot_enabled %}true{% else %}false{% endif %}"
 
+    # community.docker 3.x+: docker-compose v1 (and its Ansible module) is
+    # dead upstream; the server only has the Compose v2 plugin.
     - name: (Re)Starting aPuppet
-      docker_compose:
+      community.docker.docker_compose_v2:
         project_src: ../
         state: present
-        stopped: no
         restarted: yes
 
     - name: Welcome!
