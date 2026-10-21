@@ -16,12 +16,15 @@
         ssl_enabled: "{% if is_certbot_enabled %}true{% else %}false{% endif %}"
 
     # community.docker 3.x+: docker-compose v1 (and its Ansible module) is
-    # dead upstream; the server only has the Compose v2 plugin. Note v2 uses
-    # "state: restarted" — there is no separate "restarted" parameter.
+    # dead upstream; the server only has the Compose v2 plugin. "state:
+    # restarted" only restarts containers that already exist, so a cold start
+    # created nothing -- recreate: always gives the original "start if absent,
+    # restart if running" behaviour of the v1 module.
     - name: (Re)Starting aPuppet
       community.docker.docker_compose_v2:
         project_src: ../
-        state: restarted
+        state: present
+        recreate: always
 
     - name: Welcome!
       debug:
