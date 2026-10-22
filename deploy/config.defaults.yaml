@@ -2,11 +2,15 @@
 
 ## Janus
 # REST API
-api_http: true
+# Closed 2026-10-22 (Micheal approved): the client and web-admin use only
+# wss :8989 through nginx :443. The Janus HTTP/HTTPS API ports were bound on
+# the public interface and are an unnecessary attack surface. Keep the port
+# vars for the templates; re-enable only with a firewall in front.
+api_http: false
 api_http_port: 8088
 
 # REST API (secure)
-api_https: true
+api_https: false
 api_https_port: 8089
 
 # Admin REST API (Secure)
